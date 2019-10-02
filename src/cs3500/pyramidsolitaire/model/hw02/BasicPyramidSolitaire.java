@@ -74,7 +74,7 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
       this.pyramid.add((ArrayList<Card>) tempRow);
     }
 
-    System.out.println("Pyramid: " + this.pyramid);
+    //System.out.println("Pyramid: " + this.pyramid);
 
     for (int i = 0; i < numDraw; i++) {
       if (copyDeck.size() == 0) {
@@ -84,11 +84,11 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
       copyDeck.remove(0);
     }
 
-    System.out.println("Draw: " + this.draw);
+    //System.out.println("Draw: " + this.draw);
 
     this.stock = copyDeck;
 
-    System.out.println("Stock: " + this.stock);
+    //System.out.println("Stock: " + this.stock);
 
     this.numDraw = numDraw;
     this.numRows = numRows;
@@ -123,8 +123,8 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
     if (row == this.pyramid.size() - 1) {
       return true;
     } else {
-      System.out.println("left exposed: " + this.getCardAt(row + 1, card));
-      System.out.println("right exposed: " + this.getCardAt(row + 1, card + 1));
+     // System.out.println("left exposed: " + this.getCardAt(row + 1, card));
+     // System.out.println("right exposed: " + this.getCardAt(row + 1, card + 1));
       return this.getCardAt(row + 1, card) == null && this.getCardAt(row + 1, card + 1) == null;
     }
   }
@@ -137,12 +137,13 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
    * @return true if given coordinate is invalid or empty, false otherwise.
    */
   private boolean checkRowCard(int row, int card) {
-    System.out.println("row: " + row);
-    System.out.println("card: " + card);
-    System.out.println("this.pyramid.size() -  1: " + (this.pyramid.size() - 1));
-    System.out.println("this.getRowWidth(row) - 1: " + (this.getRowWidth(row) - 1));
-    System.out.println("this.getCardAt(row, card)" + this.getCardAt(row, card));
-    System.out.println("this.getCardAt(row, card) == null: " + (this.getCardAt(row, card) == null));
+    // System.out.println("row: " + row);
+    // System.out.println("card: " + card);
+    // System.out.println("this.pyramid.size() - 1: " + (this.pyramid.size() - 1));
+    // System.out.println("this.getRowWidth(row) - 1: " + (this.getRowWidth(row) - 1));
+    // System.out.println("this.getCardAt(row, card)" + this.getCardAt(row, card));
+    // System.out.println("this.getCardAt(row, card) == null: " + (this.getCardAt(row, card) ==
+    // null));
 
     return row < 0 || row > this.pyramid.size() - 1 || card < 0 || card > this.getRowWidth(row) - 1
         || this.getCardAt(row, card) == null;
@@ -152,7 +153,7 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
   public void remove(int row1, int card1, int row2, int card2) throws IllegalStateException {
     this.gameStateException();
 
-    System.out.println("Pyramid Before: " + this.pyramid);
+   // System.out.println("Pyramid Before: " + this.pyramid);
 
     if (row1 == row2 && card1 == card2) {
       throw new IllegalArgumentException("same card!");
@@ -168,8 +169,8 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
 
     Card c1 = this.getCardAt(row1, card1);
     Card c2 = this.getCardAt(row2, card2);
-    System.out.println("Card1: " + c1);
-    System.out.println("Card2: " + c2);
+   // System.out.println("Card1: " + c1);
+   // System.out.println("Card2: " + c2);
 
     if (c1.getValue() + c2.getValue() != 13) {
       throw new IllegalArgumentException("The selected two cards do not sum to 13" + "card1= "
@@ -179,7 +180,7 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
     this.removeCardHelper(row1, card1);
     this.removeCardHelper(row2, card2);
 
-    System.out.println("Pyramid After: " + this.pyramid);
+   // System.out.println("Pyramid After: " + this.pyramid);
   }
 
   @Override
@@ -198,7 +199,7 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
   private void removeCardHelper(int row, int card) {
     this.gameStateException();
 
-    System.out.println("Pyramid Before: " + this.pyramid);
+   // System.out.println("Pyramid Before: " + this.pyramid);
 
     if (this.checkRowCard(row, card)) {
       throw new IllegalArgumentException(
@@ -208,11 +209,11 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
     if (!this.exposed(row, card)) {
       throw new IllegalArgumentException("given card is not exposed in pyramid");
     }
-    System.out.println("Before removing: " + this.pyramid.get(row));
-    System.out.println("Row: " + row + " Card: " + card);
-    System.out.println("The card to be removed: " + this.getCardAt(row, card));
+   // System.out.println("Before removing: " + this.pyramid.get(row));
+   // System.out.println("Row: " + row + " Card: " + card);
+   // System.out.println("The card to be removed: " + this.getCardAt(row, card));
     this.pyramid.get(row).set(card, Card.EMPTY_CARD);
-    System.out.println("After removing: " + this.pyramid.get(row));
+   // System.out.println("After removing: " + this.pyramid.get(row));
 
     /*
      * boolean totallyEmpty = true; for (Card c : this.pyramid.get(row)) { totallyEmpty =
@@ -221,7 +222,7 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
      * if (totallyEmpty) { this.pyramid.remove(row); }
      */
 
-    System.out.println("Pyramid After: " + this.pyramid);
+   // System.out.println("Pyramid After: " + this.pyramid);
   }
 
   @Override
@@ -293,9 +294,9 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
     if (this.getScore() == 0) {
       return true;
     }
-    System.out.println("score is not zero");
+    // System.out.println("score is not zero");
     if ((this.stock.size() + this.draw.size()) != 0) {
-      System.out.println("stock+draw is not zero");
+      // System.out.println("stock+draw is not zero");
       return false;
     } else {
       ArrayList<Card> exposedCards = new ArrayList<Card>();
@@ -306,22 +307,22 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
           }
         }
       }
-      System.out.println("Exposed cards: " + exposedCards);
+      // System.out.println("Exposed cards: " + exposedCards);
 
       for (Card c1 : exposedCards) {
         if (c1.getValue() == 13) {
-          System.out.println("is 13");
+          // System.out.println("is 13");
           return false;
         }
         for (Card c2 : exposedCards) {
           if (c1.getValue() + c2.getValue() == 13) {
-            System.out.println("add up to 13");
+            // System.out.println("add up to 13");
             return false;
           }
         }
       }
 
-      System.out.println("no exposed cards match so loss");
+      // System.out.println("no exposed cards match so loss");
 
       return true;
     }
