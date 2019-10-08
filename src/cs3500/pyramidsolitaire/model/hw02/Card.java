@@ -53,7 +53,7 @@ public class Card {
       return false;
     }
 
-    return (((Card) o).value == this.value && ((Card) o).suite == this.suite)
+    return (((Card) o).value == this.value && ((Card) o).suite.equals(this.suite))
         || (((Card) o).value == 0 && this.value == 0);
   }
 

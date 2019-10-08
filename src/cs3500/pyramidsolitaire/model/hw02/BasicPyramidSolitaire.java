@@ -46,7 +46,7 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
 
   @Override
   public void startGame(List<Card> deck, boolean shouldShuffle, int numRows, int numDraw) {
-    if (numRows < 1 || numDraw < 0 || numRows > 9) {
+    if (deck == null || numRows < 1 || numDraw < 0 || numRows > 9) {
       throw new IllegalArgumentException("Cant have negative numrows or numdraw");
     }
 
@@ -60,7 +60,7 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
 
     this.pyramid = new ArrayList<ArrayList<Card>>();
     this.draw = new ArrayList<Card>();
-    List<Card> copyDeck = deck;
+    List<Card> copyDeck = new ArrayList<>(deck);
     if (shouldShuffle) {
       Collections.shuffle(copyDeck);
     }
@@ -74,7 +74,7 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
       this.pyramid.add((ArrayList<Card>) tempRow);
     }
 
-    //System.out.println("Pyramid: " + this.pyramid);
+    // System.out.println("Pyramid: " + this.pyramid);
 
     for (int i = 0; i < numDraw; i++) {
       if (copyDeck.size() == 0) {
@@ -84,11 +84,11 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
       copyDeck.remove(0);
     }
 
-    //System.out.println("Draw: " + this.draw);
+    // System.out.println("Draw: " + this.draw);
 
     this.stock = copyDeck;
 
-    //System.out.println("Stock: " + this.stock);
+    // System.out.println("Stock: " + this.stock);
 
     this.numDraw = numDraw;
     this.numRows = numRows;
@@ -117,15 +117,16 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
     if (this.checkRowCard(row, card)) {
       throw new IllegalArgumentException("invalid row/card value");
     }
-    if (this.getCardAt(row, card) == null) {
+    if (this.getCardAtReference(row, card) == null) {
       return false;
     }
     if (row == this.pyramid.size() - 1) {
       return true;
     } else {
-     // System.out.println("left exposed: " + this.getCardAt(row + 1, card));
-     // System.out.println("right exposed: " + this.getCardAt(row + 1, card + 1));
-      return this.getCardAt(row + 1, card) == null && this.getCardAt(row + 1, card + 1) == null;
+      // System.out.println("left exposed: " + this.getCardAtReference(row + 1, card));
+      // System.out.println("right exposed: " + this.getCardAtReference(row + 1, card + 1));
+      return this.getCardAtReference(row + 1, card) == null
+          && this.getCardAtReference(row + 1, card + 1) == null;
     }
   }
 
@@ -141,19 +142,21 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
     // System.out.println("card: " + card);
     // System.out.println("this.pyramid.size() - 1: " + (this.pyramid.size() - 1));
     // System.out.println("this.getRowWidth(row) - 1: " + (this.getRowWidth(row) - 1));
-    // System.out.println("this.getCardAt(row, card)" + this.getCardAt(row, card));
-    // System.out.println("this.getCardAt(row, card) == null: " + (this.getCardAt(row, card) ==
+    // System.out.println("this.getCardAtReference(row, card)" + this.getCardAtReference(row,
+    // card));
+    // System.out.println("this.getCardAtReference(row, card) == null: " +
+    // (this.getCardAtReference(row, card) ==
     // null));
 
     return row < 0 || row > this.pyramid.size() - 1 || card < 0 || card > this.getRowWidth(row) - 1
-        || this.getCardAt(row, card) == null;
+        || this.getCardAtReference(row, card) == null;
   }
 
   @Override
   public void remove(int row1, int card1, int row2, int card2) throws IllegalStateException {
     this.gameStateException();
 
-   // System.out.println("Pyramid Before: " + this.pyramid);
+    // System.out.println("Pyramid Before: " + this.pyramid);
 
     if (row1 == row2 && card1 == card2) {
       throw new IllegalArgumentException("same card!");
@@ -167,10 +170,10 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
       throw new IllegalArgumentException("given cards are not exposed in pyramid");
     }
 
-    Card c1 = this.getCardAt(row1, card1);
-    Card c2 = this.getCardAt(row2, card2);
-   // System.out.println("Card1: " + c1);
-   // System.out.println("Card2: " + c2);
+    Card c1 = this.getCardAtReference(row1, card1);
+    Card c2 = this.getCardAtReference(row2, card2);
+    // System.out.println("Card1: " + c1);
+    // System.out.println("Card2: " + c2);
 
     if (c1.getValue() + c2.getValue() != 13) {
       throw new IllegalArgumentException("The selected two cards do not sum to 13" + "card1= "
@@ -180,7 +183,7 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
     this.removeCardHelper(row1, card1);
     this.removeCardHelper(row2, card2);
 
-   // System.out.println("Pyramid After: " + this.pyramid);
+    // System.out.println("Pyramid After: " + this.pyramid);
   }
 
   @Override
@@ -188,7 +191,7 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
 
     this.gameStateException();
 
-    if (this.getCardAt(row, card).getValue() == 13) {
+    if (this.getCardAtReference(row, card).getValue() == 13) {
       this.removeCardHelper(row, card);
     } else {
       throw new IllegalArgumentException("selected card not King");
@@ -199,7 +202,7 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
   private void removeCardHelper(int row, int card) {
     this.gameStateException();
 
-   // System.out.println("Pyramid Before: " + this.pyramid);
+    // System.out.println("Pyramid Before: " + this.pyramid);
 
     if (this.checkRowCard(row, card)) {
       throw new IllegalArgumentException(
@@ -209,11 +212,11 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
     if (!this.exposed(row, card)) {
       throw new IllegalArgumentException("given card is not exposed in pyramid");
     }
-   // System.out.println("Before removing: " + this.pyramid.get(row));
-   // System.out.println("Row: " + row + " Card: " + card);
-   // System.out.println("The card to be removed: " + this.getCardAt(row, card));
+    // System.out.println("Before removing: " + this.pyramid.get(row));
+    // System.out.println("Row: " + row + " Card: " + card);
+    // System.out.println("The card to be removed: " + this.getCardAtReference(row, card));
     this.pyramid.get(row).set(card, Card.EMPTY_CARD);
-   // System.out.println("After removing: " + this.pyramid.get(row));
+    // System.out.println("After removing: " + this.pyramid.get(row));
 
     /*
      * boolean totallyEmpty = true; for (Card c : this.pyramid.get(row)) { totallyEmpty =
@@ -222,7 +225,7 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
      * if (totallyEmpty) { this.pyramid.remove(row); }
      */
 
-   // System.out.println("Pyramid After: " + this.pyramid);
+    // System.out.println("Pyramid After: " + this.pyramid);
   }
 
   @Override
@@ -240,7 +243,7 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
     }
 
     Card c1 = this.draw.get(drawIndex);
-    Card c2 = this.getCardAt(row, card);
+    Card c2 = this.getCardAtReference(row, card);
 
     if (c1.getValue() + c2.getValue() != 13) {
       throw new IllegalArgumentException(
@@ -302,8 +305,12 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
       ArrayList<Card> exposedCards = new ArrayList<Card>();
       for (int i = 0; i < this.pyramid.size(); i++) {
         for (int j = 0; j < this.pyramid.get(i).size(); j++) {
-          if (this.exposed(i, j)) {
-            exposedCards.add(this.getCardAt(i, j));
+          try {
+            if (this.exposed(i, j)) {
+              exposedCards.add(this.getCardAtReference(i, j));
+            }
+          } catch (IllegalArgumentException e) {
+            // Do nothing as an exception thrown is an illegal card
           }
         }
       }
@@ -343,6 +350,15 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
 
   @Override
   public Card getCardAt(int row, int card) throws IllegalStateException {
+    Card copy = this.getCardAtReference(row, card);
+    if (copy == null) {
+      return null;
+    }
+    copy = new Card(copy.getValue(), copy.getSuite());
+    return copy;
+  }
+
+  private Card getCardAtReference(int row, int card) throws IllegalStateException {
     this.gameStateException();
     if (row < 0 || row > this.numRows - 1 || card < 0 || card > this.getRowWidth(row) - 1) {
       throw new IllegalArgumentException("Cannot remove card invalid row or card value");
@@ -358,7 +374,8 @@ public class BasicPyramidSolitaire implements PyramidSolitaireModel<Card> {
   @Override
   public List<Card> getDrawCards() throws IllegalStateException {
     this.gameStateException();
-    return this.draw;
+    List<Card> copy = new ArrayList<Card>(this.draw);
+    return copy;
   }
 
 }

@@ -3,6 +3,11 @@ package cs3500.pyramidsolitaire.controller;
 import java.util.List;
 import cs3500.pyramidsolitaire.model.hw02.PyramidSolitaireModel;
 
+/**
+ * Represents PyramidSolitaireController interface. 
+ * @author Akira Kato
+ *
+ */
 public interface PyramidSolitaireController {
 
   /**

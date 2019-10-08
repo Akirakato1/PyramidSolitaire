@@ -9,15 +9,16 @@ import cs3500.pyramidsolitaire.model.hw02.PyramidSolitaireModel;
  * Represents the view of pyramid solitaire. Does not depent on type of card provided in model.
  *
  */
-public class PyramidSolitaireTextualView implements PyramidSolitaireView{
+public class PyramidSolitaireTextualView implements PyramidSolitaireView {
   private final PyramidSolitaireModel<?> model;
   private final Appendable out;
   // ... any other fields you need
 
   public PyramidSolitaireTextualView(PyramidSolitaireModel<?> model, Appendable ap) {
     this.model = model;
-    this.out=ap;
+    this.out = ap;
   }
+
   /**
    * Constructor for view.
    * 
@@ -68,12 +69,14 @@ public class PyramidSolitaireTextualView implements PyramidSolitaireView{
       }
     }
     List<?> drawCards = model.getDrawCards();
-    String drawCardView = "Draw:";
+    String drawCardView = "";
+    int counter = 0;
     for (Object dc : drawCards) {
+      counter = 1;
       drawCardView = drawCardView + " " + dc.toString() + ",";
     }
 
-    pyramidView.add(drawCardView.substring(0, drawCardView.length() - 1));
+    pyramidView.add("Draw:" + drawCardView.substring(0, drawCardView.length() - counter));
 
     String output = "";
     for (String row : pyramidView) {
@@ -89,5 +92,5 @@ public class PyramidSolitaireTextualView implements PyramidSolitaireView{
   public void render() throws IOException {
     this.out.append(this.toString());
   }
-  
+
 }
