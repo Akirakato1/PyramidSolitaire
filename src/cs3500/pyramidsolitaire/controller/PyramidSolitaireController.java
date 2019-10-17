@@ -4,7 +4,8 @@ import java.util.List;
 import cs3500.pyramidsolitaire.model.hw02.PyramidSolitaireModel;
 
 /**
- * Represents PyramidSolitaireController interface. 
+ * Represents PyramidSolitaireController interface. Used to implement solitaire textual controller.
+ * 
  * @author Akira Kato
  *
  */

@@ -149,7 +149,6 @@ public class PyramidSolitaireTextualController implements PyramidSolitaireContro
     try {
       this.out.append(message + "\n");
     } catch (IOException e1) {
-      e1.printStackTrace();
       throw new IllegalStateException("Appendable failed to take\n");
     }
   }

@@ -4,7 +4,7 @@ package cs3500.pyramidsolitaire.model.hw02;
  * Represents a playing card. if value==0, it is considered an empty card. a static emptyCard is
  * provided.
  */
-public class Card {
+public class Card implements Comparable<Card> {
   private final int value;
   private final String suite;
   public static final Card EMPTY_CARD = new Card(0, "♣");
@@ -89,6 +89,11 @@ public class Card {
    */
   public String getSuite() {
     return this.suite;
+  }
+
+  @Override
+  public int compareTo(Card o) {
+    return o.hashCode() - this.hashCode();
   }
 
 }
